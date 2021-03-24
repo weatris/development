@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Page</title>
+    <link rel="stylesheet" href="css/user.css">
+</head>
+<body>
+<div class="center">
+    <h1>Update User Data</h1>
+    <form id="confirm" action="javascript:func();">
+        <div class="data">
+            <input type="password" required>
+            <span></span>
+            <label>Old Password</label>
+        </div>
+        <input type="submit" value ="Confirm">
+    </form>
+
+    <form id="field"  style="display:none;" action="menu.html">
+        <div class="data">
+            <input type="text" required>
+            <span></span>
+            <label>Name</label>
+        </div>
+        <div class="data">
+            <input type="text" required>
+            <span></span>
+            <label>Surname</label>
+        </div>
+        <div class="data">
+            <input type="text" required>
+            <span></span>
+            <label>Enter Email</label>
+        </div>
+        <div class="data">
+            <input type="password" required>
+            <span></span>
+            <label>New Password</label>
+        </div>
+        <div class="data">
+            <input type="password" required>
+            <span></span>
+            <label>Confirm New Password</label>
+        </div>
+        <input type="submit" value ="Save">
+    </form>
+    <form  action="menu.html">
+        <button>Cancel</button>
+    </form>
+    <script>
+        function func()
+    {
+        var x = document.getElementById("field");
+            x.style.display = "block";
+        x = document.getElementById("confirm");
+            x.style.display = "none";
+    }
+    </script>
+</div>
+</body>
+</html>

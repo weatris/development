@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Main Page</title>
+<link rel="stylesheet" href="css/menu.css">
+</head>
+<body>
+<div class="nav">
+  <a  href="">Manage Events</a>
+  <a href="">Setting</a>
+  <a href='calendar.html'>Calendar</a>
+  <a id="logout" href='login.html' >Log Out</a>
+  <a id="user"  href='user.html'>Update User Info</a>
+</div>
+<div class="tablet" id="Manage Events">
+    <h1>Manage Events</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>time</th>
+        </tr>
+        </thead>
+        <tbody id ="tableData">
+            <tr><td>exercises</td><td>12</td></tr>
+            <tr><td>swimming</td><td>15</td></tr>
+        </tbody>
+    </table>
+    <div class="Events">
+        <a id="add" href='add_event.html'>Add Event</a>
+        <a id="update" href='update_event.html'>Update Event</a>
+        <a class="delete">Delete Event</a>
+    </div>
+</div>
+<div class="tablet" id="Settings">
+    <div class="Settings">
+        <h1>Settings</h1>
+        <ul>
+            <li><button>do smth</button></li>
+            <li><button>do smth else</button></li>
+            <li><button  onclick="alert('you are admin now!');">become admin</button></li>
+            <form  action="login.html">
+                <li><button class="delete">delete account</button></li>
+            </form>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>

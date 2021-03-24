@@ -1,0 +1,139 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-image: linear-gradient(to right top, #d16ba5, #c777b9, #ba83ca, #aa8fd8, #9a9ae1, #8aa7ec, #79b3f4, #69bff8, #52cffe, #41dfff, #46eefa, #5ffbf1);
+  height: 100vh;
+  font-family: arial;
+  overflow: hidden;
+}
+
+.nav {
+  overflow: hidden;
+  background-color: #333;
+}
+.nav a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 24px;
+  text-decoration: none;
+}
+.nav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+@media screen and (max-width: 600px) {
+  .nav a {
+    float: none;
+    width: 100%;
+  }
+}
+.tablet {
+  width: 50%;
+  margin: auto;
+  height: auto;
+  padding: 4px;
+  border-radius: 20px;
+  background-color: white;
+}
+.tablet h1 {
+  text-align: center;
+}
+
+.Events {
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #7ad3ff;
+  border-radius: 0 0 20px 20px;
+  border: 2px solid silver;
+  align-content: center;
+  appearance: button;
+}
+
+#tableData tr:hover {
+  background-color: #339CFF;
+}
+
+#logout, #user {
+  float: right;
+}
+
+.Events > a {
+  appearance: button;
+  align: left;
+  margin: 18px;
+  width: 150px;
+  text-align: center;
+  text-decoration: none;
+  padding: 5px 16px;
+  cursor: pointer;
+  float: left;
+  border-radius: 10px;
+  border: 2px solid white;
+}
+.Events > a:focus {
+  outline: 0 !important;
+  border: 1px solid white;
+}
+
+#add {
+  background-color: chartreuse;
+  color: black;
+}
+
+#update {
+  background-color: gold;
+  color: black;
+}
+
+.delete {
+  background-color: crimson;
+}
+
+table {
+  font-family: arial;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid silver;
+  padding: 10px;
+}
+
+.Settings {
+  top: 50%;
+  text-decoration: none;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: white;
+  border-radius: 20px;
+  border: 2px solid silver;
+  align-content: center;
+}
+.Settings button {
+  width: 100%;
+  height: 30px;
+  margin: 0 0 5px 0;
+  border: 1px solid silver;
+  border-radius: 25px;
+  font-size: 16px;
+  text-align: center;
+  font-weight: 700;
+  outline: none;
+  cursor: pointer;
+}
+.Settings button:hover {
+  color: white;
+  background-color: grey;
+  border: 1px solid black;
+}
+
+/*# sourceMappingURL=menu.css.map */
