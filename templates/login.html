@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign In Page</title>
+    <link rel="stylesheet" href="../static/css/login.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="center">
+    <div id="login">
+         <h1 id="meta">Login</h1>
+    </div>
+    <form action="javascript:Login()" class="main">
+        <div class="data">
+            <input type="text" id="name" placeholder=" ">
+            <span></span>
+            <label>UserName</label>
+        </div>
+        <div class="data">
+            <input  type="password" id="password" placeholder=" ">
+            <span></span>
+            <label>Password</label>
+        </div>
+        <div class="forgot" >
+            <a onclick="window.location.href='/forgot_password'">Forgot Password ? </a>
+        </div>
+        <input type="submit"  value ="Login">
+        <div class="signup"> First time here ?
+            <a onclick="window.location.href='/sign_up'">SignUp</a>
+        </div>
+    </form>
+</div>
+<script>
+    function Login()
+    {
+    var username_value=$("#name").val();
+    var password_value=$("#password").val();
+    $.ajax({
+        url:'/',
+        type:'post',
+        data:{'username':username_value,
+            'password':password_value},
+        success: function(resp)
+        {
+            console.log(resp);
+            if (resp['message']=='Success')
+                window.location.href='/menu';
+            else if (resp['message']=='No data')
+                document.getElementById("login").innerHTML ='<h1 style="color:crimson;font-size:16x;">Enter data</h1>';
+            else
+                document.getElementById("login").innerHTML ='<h1 style="color:crimson;font-size:16x;">Enter correct password/name</h1>';
+        }
+    });
+    }
+</script>
+</body>
+</html>
