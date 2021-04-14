@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<title>Main Page</title>
+<link rel="stylesheet" href="../static/css/menu.css">
+</head>
+<body onload="start()">
+<input type="checkbox" id="check">
+<label for="check">
+    <img src="../static/img/tab.png" id="btn">
+    <img src="../static/img/cancel.png" id="cncl">
+</label>
+
+<div class="sidebar">
+    <header>My Calendar</header>
+    <ul style="list-style-type: none;">
+        <li><a  href="javascript:func('ManageEvents')">Events</a></li>
+        <li><a href="javascript:func('Settings')">Setting</a></li>
+        <li><a>About</a></li>
+    </ul>
+</div>
+<div class="nav">
+  <a id="logout"  onclick="window.location.href='/'"  style="text-align:right;cursor:pointer;;" >Log Out</a>
+  <a id="user" onclick="window.location.href='/user'"  style="text-align:right;cursor:pointer;;">Update User Info</a>
+</div>
+<div class="wrapper">
+    <div id="calendar" class="calendar" >
+        <div class="month">
+            <div class="prev" onclick="moveDate('prev')">
+                <span><img src="../static/img/prev.png"></span>
+            </div>
+            <div>
+                <h2 id="month"></h2>
+                <p id="date"></p>
+            </div>
+            <div class="next" onclick="moveDate('next')" >
+                <span><img src="../static/img/next.png"></span>
+            </div>
+        </div>
+        <div class="week" style="pointer-events: none;">
+            <div>Sun</div>
+            <div>Mon</div>
+            <div>Tue</div>
+            <div>Wed</div>
+            <div>Thu</div>
+            <div>Fri</div>
+            <div>Sat</div>
+        </div>
+        <div class="days"></div>
+    </div>
+    <div id="ManageEvents" style="display:none;">
+        <h1 style="user-select:none; text-align:center;">Events</h1>
+        <table id="events" style="cursor:pointer;">
+        <thead>
+        <col width="150px" />
+        <col width="140px" />
+        <tr>
+            <th>Name</th>
+            <th>time</th>
+            <th>description</th>
+        </tr>
+        </thead>
+        <tbody id ="tableData">
+
+        </tbody>
+    </table>
+        <div class="Events">
+        <a class="add" href="javascript:ShowAddEvent()" >Add Event</a>
+        <a class="update" href="javascript:ShowUpdateEvent()" >Update Event</a>
+        <a class="add" style="background:skyblue;" onclick='alert("terr")'>Share Event</a>
+        <a class="delete" href="javascript:ShowDeleteEvent()">Delete Event</a>
+    </div>
+    </div>
+    <div id="Settings" style="display:none;">
+    <div class="Settings" style="user-select:none;">
+        <h1>Settings</h1>
+        <ul>
+            <li><button>do smth</button></li>
+            <li><button>do smth else</button></li>
+            <li><button  onclick="alert('you are admin now!');">become admin</button></li>
+            <li><button class="delete"  onclick="DeleteAccount()">delete account</button></li>
+        </ul>
+    </div>
+</div>
+    <div id="AddEvent" class="popup_box" style="display:none;">
+        <div class="back"></div>
+        <div class="content">
+            <h1 id="mes_add">Create new Event</h1>
+            <form  action="javascript:AddEvent()">
+                <div class="data">
+                    <input type="text" id="name" placeholder=" ">
+                    <span></span>
+                    <label>Name</label>
+                </div>
+                <div class="data">
+                    <input type="text" id="time" placeholder=" ">
+                    <span></span>
+                    <label>Time</label>
+                </div>
+                <div class="data">
+                    <input type="text" id="date_" placeholder=" ">
+                    <span></span>
+                    <label>dd/mm/yy</label>
+                </div>
+                <div class="data">
+                    <input type="text" id="desc" placeholder=" ">
+                    <span></span>
+                    <label>description</label>
+                </div>
+                <input type="submit" value ="Save">
+            </form>
+            <form  action="javascript:ShowAddEvent()">
+                <button class="exit">Cancel</button>
+            </form>
+        </div>
+    </div>
+    <div id="UpdateEvent" class="popup_box" style="display:none;">
+        <div class="back"></div>
+        <div class="content">
+            <h1 id="mes_up">Update Event</h1>
+            <form  action="javascript:UpdateEvent()">
+                <div class="data">
+                    <input type="text" id="up_name" placeholder=" ">
+                    <span></span>
+                    <label>Name</label>
+                </div>
+                <div class="data">
+                    <input type="text" id="up_time" placeholder=" ">
+                    <span></span>
+                    <label>time</label>
+                </div>
+                <div class="data">
+                    <input type="text" id="up_date" placeholder=" ">
+                    <span></span>
+                    <label>dd/mm/yy</label>
+                </div>
+                <div class="data">
+                    <input type="text" id="up_desc" placeholder=" ">
+                    <span></span>
+                    <label>description</label>
+                </div>
+
+                <input type="submit" value ="Save">
+            </form>
+            <form  action="javascript:ShowUpdateEvent()">
+                <button class="exit">Cancel</button>
+            </form>
+        </div>
+    </div>
+    <div id="DeleteEvent" class="popup_box" style="display:none;">
+        <div class="back"></div>
+        <div class="content">
+            <h1 id="mes_del">Delete Event(s)</h1>
+            <form  action="javascript:DeleteEvent()">
+                <input type="submit" value ="Save">
+            </form>
+            <form  action="javascript:ShowDeleteEvent()">
+                <button class="exit">Cancel</button>
+            </form>
+        </div>
+    </div>
+    </div>
+<script src="../static/js/calendar.js"></script>
+</body>
+</html>

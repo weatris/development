@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up Page</title>
+    <link rel="stylesheet" href="../static/css/sign_up.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<div class="center" >
+    <div id="message">
+        <h1 >Register</h1>
+    </div>
+    <form  action="javascript:func()">
+        <div class="data">
+            <input type="text" id="name" placeholder=" ">
+            <span></span>
+            <label>Name</label>
+        </div>
+        <div class="data">
+            <input type="text" id="surname" placeholder=" ">
+            <span></span>
+            <label>Surname</label>
+        </div>
+        <div class="data">
+            <input type="text" id="username" placeholder=" ">
+            <span></span>
+            <label>UserName</label>
+        </div>
+        <div class="data">
+            <input type="password" id="password1" placeholder=" ">
+            <span></span>
+            <label>Password</label>
+        </div>
+        <div class="data">
+            <input type="password" id="password2" placeholder=" ">
+            <span></span>
+            <label>Repeat password</label>
+        </div>
+        <div class="data">
+            <input type="text" id="email" placeholder=" ">
+            <span></span>
+            <label>Enter Email</label>
+        </div>
+       <input type="submit" value ="Register">
+    </form>
+    <form  action="/">
+        <button>Cancel</button>
+    </form>
+</div>
+<script>
+    function func()
+    {
+    var name_value=$("#name").val();
+    var surname_value=$("#surname").val();
+    var username_value=$("#username").val();
+    var password_value1=$("#password1").val();
+    var password_value2=$("#password2").val();
+    var email_value=$("#email").val();
+    $.ajax({
+        url:'/sign_up',
+        type:'post',
+        data:{'name':name_value,
+            'surname':surname_value,
+            'username':username_value,
+            'password1':password_value1,
+            'password2':password_value2,
+            'email':email_value,
+            },
+        success: function(resp)
+        {
+        if (resp['message']=='Success'){
+            alert(resp['message']);
+            window.location.href='/menu';
+        }
+        document.getElementById("message").innerHTML="<h1 style='color:crimson'>"+resp['message']+"</h1>";
+        console.log(resp);
+        }
+    });
+    }
+</script>
+</body>
+</html>
