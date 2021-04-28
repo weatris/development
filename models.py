@@ -1,8 +1,10 @@
 from datetime import timedelta
 from flask import Flask, render_template, request, jsonify ,session as ss ,json
-from sqlalchemy import Column, Integer, String, ForeignKey, Table, Time, Date
+from sqlalchemy import Column, Integer, String, ForeignKey, Table
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship, DeclarativeMeta
+from sqlalchemy.ext.mutable import Mutable
+from sqlalchemy.dialects.postgresql import ARRAY
+from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 events_users = Table('events_users', Base.metadata,
@@ -10,10 +12,33 @@ events_users = Table('events_users', Base.metadata,
                      Column('event_id', Integer, ForeignKey('events.id_event'))
                      )
 
-# shared_events = Table('shared_events', Base.metadata,
-#                      Column('user_id', Integer, ForeignKey('users.id')),
-#                      Column('event_id', Integer, ForeignKey('events.id_event'))
-#                      )
+friends = Table(
+    'friends', Base.metadata,
+    Column('friend_1_id', Integer, ForeignKey('users.id'), primary_key=True),
+    Column('friend_2_id', Integer, ForeignKey('users.id'), primary_key=True)
+    )
+
+class MutableList(Mutable, list):
+    #mutable list from https://gist.github.com/kirang89/22d111737af0fca251e3
+    def append(self, value):
+        list.append(self, value)
+        self.changed()
+
+    def remove(self, index=0):
+        value = list.remove(self, index)
+        self.changed()
+        return value
+
+    @classmethod
+    def coerce(cls, key, value):
+        if not isinstance(value, MutableList):
+            if isinstance(value, list):
+                return MutableList(value)
+            return Mutable.coerce(key, value)
+        else:
+            return value
+
+
 
 
 class User(Base):
@@ -27,6 +52,11 @@ class User(Base):
     password = Column('password', String)
     role = Column('role', String)
     my_events = relationship("Event", secondary=events_users)
+    friends = relationship("User", secondary=friends,
+                           primaryjoin=(id == friends.c.friend_1_id),
+                           secondaryjoin=(id == friends.c.friend_2_id),
+                           )
+
 
     def __init__(self, name=None, username=None, surname=None, email=None, password=None, role="user"):
         self.name = name
@@ -46,13 +76,15 @@ class Event(Base):
     time = Column('time', String)
     date = Column('date', String)
     owner_id = Column('owner_id', Integer)
+    shared_with = Column('shared_with', MutableList.as_mutable(ARRAY(Integer)))
 
     def __init__(self, name="My Event", description="My description", time=None, date=None,owner_id=None):
         self.name = name
         self.time = time
         self.date = date
         self.description = description
-        self.owner_id=owner_id
+        self.owner_id = owner_id
+        self.shared_with = []
 
     def serialize(self):
         return {

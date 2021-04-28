@@ -10,21 +10,21 @@
 <body onload="start()">
 <input type="checkbox" id="check">
 <label for="check">
-    <img src="../static/img/tab.png" id="btn">
+    <img onclick="check()" src="../static/img/tab.png" id="btn">
     <img src="../static/img/cancel.png" id="cncl">
 </label>
 
-<div class="sidebar">
+<div class="sidebar" onload="check()">
     <header>My Calendar</header>
     <ul style="list-style-type: none;">
-        <li><a  href="javascript:func('ManageEvents')">Events</a></li>
         <li><a href="javascript:func('Settings')">Setting</a></li>
+        <li><a href="javascript:Display('AddFriend')">Add Friend</a></li>
         <li><a>About</a></li>
     </ul>
 </div>
 <div class="nav">
-  <a id="logout"  onclick="window.location.href='/'"  style="text-align:right;cursor:pointer;;" >Log Out</a>
-  <a id="user" onclick="window.location.href='/user'"  style="text-align:right;cursor:pointer;;">Update User Info</a>
+  <a id="logout"  onclick="LogOut()"  style="text-align:right;cursor:pointer;" >Log Out</a>
+  <a id="user"  onclick="ShowManageAccount()"  style="text-align:right;cursor:pointer;" >Logged as {{username}}</a>
 </div>
 <div class="wrapper">
     <div id="calendar" class="calendar" >
@@ -68,25 +68,27 @@
         </tbody>
     </table>
         <div class="Events">
-        <a class="add" href="javascript:ShowAddEvent()" >Add Event</a>
-        <a class="update" href="javascript:ShowUpdateEvent()" >Update Event</a>
-        <a class="add" style="background:skyblue;" onclick='alert("terr")'>Share Event</a>
-        <a class="delete" href="javascript:ShowDeleteEvent()">Delete Event</a>
+        <a class="add" onclick="ShowAddEvent()" >Add Event</a>
+        <a class="update" onclick="ShowUpdateEvent()" >Update Event</a>
+        <a class="add" style="background:skyblue;" onclick='ShowShareEvent()'>Share Event</a>
+        <a class="delete" onclick="ShowDeleteEvent()">Delete Event</a>
     </div>
     </div>
     <div id="Settings" style="display:none;">
-    <div class="Settings" style="user-select:none;">
-        <h1>Settings</h1>
-        <ul>
-            <li><button>do smth</button></li>
-            <li><button>do smth else</button></li>
-            <li><button  onclick="alert('you are admin now!');">become admin</button></li>
-            <li><button class="delete"  onclick="DeleteAccount()">delete account</button></li>
-        </ul>
+        <div class="Settings" style="user-select:none;">
+            <h1>Settings</h1>
+            <ul>
+                <li><button>do smth</button></li>
+                <li><button>do smth else</button></li>
+                <li id="admin"><button onclick="alert('magic !');">admin tricks </button></li>
+                <li><button class="delete"  onclick="ShowDeleteAccount()">delete account</button></li>
+            </ul>
+        </div>
     </div>
 </div>
+<div class="pop_up">
+    <div id="back" style="display: none"></div>
     <div id="AddEvent" class="popup_box" style="display:none;">
-        <div class="back"></div>
         <div class="content">
             <h1 id="mes_add">Create new Event</h1>
             <form  action="javascript:AddEvent()">
@@ -118,7 +120,6 @@
         </div>
     </div>
     <div id="UpdateEvent" class="popup_box" style="display:none;">
-        <div class="back"></div>
         <div class="content">
             <h1 id="mes_up">Update Event</h1>
             <form  action="javascript:UpdateEvent()">
@@ -151,9 +152,8 @@
         </div>
     </div>
     <div id="DeleteEvent" class="popup_box" style="display:none;">
-        <div class="back"></div>
         <div class="content">
-            <h1 id="mes_del">Delete Event(s)</h1>
+            <h1 id="mes_del">You sure ?</h1>
             <form  action="javascript:DeleteEvent()">
                 <input type="submit" value ="Save">
             </form>
@@ -162,7 +162,110 @@
             </form>
         </div>
     </div>
+    <div id="ShareEvent" class="popup_box" style="display:none;">
+        <div class="content">
+            <h1 id="mes_share_event">Share Event(s) with a friend</h1>
+            <div id="friends">
+                <table id="friends_table">
+                    <tr><td id="fr_1" onclick="SelectFriend(this.id)">friend_1</td></tr>
+                    <tr><td id="fr_2" onclick="SelectFriend(this.id)">friend_2</td></tr>
+                    <tr><td id="fr_3" onclick="SelectFriend(this.id)">friend_3</td></tr>
+                    <tr><td id="fr_4" onclick="SelectFriend(this.id)">friend_4</td></tr>
+                </table>
+
+            </div>
+            <form  action="javascript:ShareEvent()">
+                <input type="submit" value ="Yes">
+            </form>
+            <form  action="javascript:ShowShareEvent()">
+                <button class="exit">Cancel</button>
+            </form>
+        </div>
     </div>
+</div>
+
+<div class="pop_up">
+    <div id="DeleteAccount" class="popup_box" style="display:none;">
+        <div class="content">
+            <h1 id="mes_del_acc">Delete Account</h1>
+            <form  action="javascript:DeleteAccount()">
+                <input type="submit" value ="Yes">
+            </form>
+            <form  action="javascript:ShowDeleteAccount()">
+                <button class="exit">Cancel</button>
+            </form>
+        </div>
+    </div>
+    <div id="AddFriend" class="popup_box" style="display:none;">
+        <div class="content">
+            <h1 id="mes_add_friend">Add Friend</h1>
+            <form  action="javascript:AddFriend()">
+                <div class="data">
+                    <input type="text" id="friend_name" placeholder=" ">
+                    <span></span>
+                    <label>Name</label>
+                </div>
+                <input type="submit" value ="Yes">
+            </form>
+            <form  action="javascript:Display('AddFriend')">
+                <button class="exit">Cancel</button>
+            </form>
+        </div>
+    </div>
+    <div id="ManageUser" class="popup_box" style="display:none;">
+        <div class="content">
+            <div id="message">
+                <h1>Update User Data</h1>
+            </div>
+            <form id="confirm" action='javascript:CheckPassword()'>
+                <div class="data">
+                    <input type="password" id ='check_password' placeholder=" ">
+                    <span></span>
+                    <label>Enter Password</label>
+                </div>
+                <input type="submit" value ="Confirm">
+            </form>
+
+            <form id="field"  style="display:none;" action='javascript:ChangeData()'>
+                <div class="data">
+                    <input type="text" id="username" value='{{username}}' placeholder=" ">
+                    <span></span>
+                    <label>UserName</label>
+                </div>
+                <div class="data">
+                    <input type="text" id="user_name" value='{{name}}' placeholder=" ">
+                    <span></span>
+                    <label>Name</label>
+                </div>
+                <div class="data">
+                    <input type="text" id="surname" value='{{surname}}' placeholder=" " >
+                    <span></span>
+                    <label>Surname</label>
+                </div>
+                <div class="data">
+                    <input type="text" id="email" value='{{email}}' placeholder=" ">
+                    <span></span>
+                    <label>Enter Email</label>
+                </div>
+                <div class="data">
+                    <input type="password"  id="password1" placeholder=" ">
+                    <span></span>
+                    <label>New Password</label>
+                </div>
+                <div class="data">
+                    <input type="password" id="password2" placeholder=" ">
+                    <span></span>
+                    <label>Confirm New Password</label>
+                </div>
+                <input type="submit" value ="Save">
+            </form>
+            <form  action="javascript:ShowManageAccount();">
+                <button class="exit">Cancel</button>
+            </form>
+        </div>
+    </div>
+</div>
 <script src="../static/js/calendar.js"></script>
+<script src="../static/js/menu.js"></script>
 </body>
 </html>

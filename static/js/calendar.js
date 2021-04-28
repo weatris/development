@@ -58,15 +58,6 @@ start();
 GetEventsForDay(date=current_day)
 }
 
-function func(id)
-{
-    var x = document.getElementById(id);
-    if(x.style.display == "block")
-        x.style.display = "none";
-    else
-        x.style.display = "block";
-    }
-
 function GetEventsForDay(date=current_day)
 {
 try{document.getElementById(prev_id).style.borderColor = "HoneyDew";}
@@ -94,7 +85,7 @@ $.ajax({
                 try {
                     var temp_array =user_events['user_list'];
                     temp_array.sort(function (a, b) {
-                        return parseInt(a['time']) - parseInt(b['time']) ;
+                        return a['time'].localeCompare(b['time']);
                         });
                     for (var key in temp_array){
                         var arr=temp_array[key];
@@ -115,13 +106,20 @@ $.ajax({
         }
     });
 }
-function ShowAddEvent()
+
+function  Display(id)
 {
-    var x = document.getElementById('AddEvent');
+    func('back');
+    var x = document.getElementById(id);
     if(x.style.display=='none')
         x.style.display='block';
     else
         x.style.display='none';
+}
+
+function ShowAddEvent()
+{
+    Display('AddEvent');
     document.getElementById("mes_add").innerHTML='<h1>Create new Event</h1>';
     document.getElementById("name").value = "";
     document.getElementById("time").value = "";
@@ -146,10 +144,9 @@ function AddEvent()
                 ShowAddEvent();
                 GetEventsForDay();
             }
-            else if (resp['message']=='Invalid data')
-                document.getElementById("mes_add").innerHTML ='<h1 style="color:crimson;">Enter data</h1>';
             else
-                document.getElementById("mes_add").innerHTML ='<h1 style="color:crimson;">Enter correct data</h1>';
+                document.getElementById("mes_add").innerHTML =
+                    '<h1 style="color:lightblue;">'+resp["message"]+'</h1>';
         }
     });
 }
@@ -157,11 +154,7 @@ function AddEvent()
 function ShowUpdateEvent()
 {
     if(chosen_events.length!=0) {
-        var x = document.getElementById('UpdateEvent');
-        if (x.style.display == 'none')
-            x.style.display = 'block';
-        else
-            x.style.display = 'none';
+        Display('UpdateEvent');
         var table = document.getElementById(chosen_events[0]);
         document.getElementById("mes_up").innerHTML = '<h1>Update Event</h1>';
         document.getElementById("up_name").value = table.cells[0].innerHTML;
@@ -197,10 +190,9 @@ function UpdateEvent()
                     GetEventsForDay();
                 }
 
-                else if (resp['message']=='Invalid data')
-                    document.getElementById("mes_up").innerHTML ='<h1 style="color:crimson;font-size: 14px;">Enter data</h1>';
                 else
-                    document.getElementById("mes_up").innerHTML ='<h1 style="color:crimson;font-size: 14px;">Enter correct date</h1>';
+                    document.getElementById("mes_up").innerHTML =
+                        '<h1 style="color:lightblue;">'+resp["message"]+'</h1>';
             }
         });
 }
@@ -208,14 +200,9 @@ function UpdateEvent()
 function ShowDeleteEvent()
 {
     if(chosen_events.length!=0) {
-        var x = document.getElementById('DeleteEvent');
-        if (x.style.display == 'none')
-            x.style.display = 'block';
-        else
-            x.style.display = 'none';
+        Display('DeleteEvent');
     }
 }
-
 
 function DeleteEvent()
 {
@@ -228,7 +215,7 @@ function DeleteEvent()
         url:'/delete_event',
         type:'post',
         data:{'names':names,
-            'date':current_day + '/' + (dt.getMonth() + 1) + '/' + dt.getFullYear(),
+            'date':current_day + '/' + (dt.getMonth() + 1) + '/' + dt.getFullYear()
         },
         success: function(resp)
         {
@@ -238,7 +225,8 @@ function DeleteEvent()
                 GetEventsForDay();
             }
             else
-                document.getElementById("mes_del").innerHTML ='<h1 style="color:crimson;font-size: 14px;">Error !</h1>';
+                document.getElementById("mes_del").innerHTML
+                    ='<h1 style="color:lightblue;">'+resp["message"]+'</h1>';
         }
     });
 }
@@ -257,18 +245,98 @@ function GetClickedEvent(id)
     //console.log(chosen_events);
 }
 
-function DeleteAccount()
+function ShowShareEvent()
 {
-debugger;
+    debugger;
+    if(chosen_events.length!=0) {
+        func('back');
+        chosen_friends=[];
+        var x = document.getElementById('ShareEvent');
+        if (x.style.display != 'none')
+            x.style.display = 'none';
+        else{
+            x.style.display = 'block';
+            var text='';
+            $.ajax({
+                url:'/get_friends',
+                type:'post',
+                data:{},
+                success: function(resp)
+                {
+                    if (resp['message']=='Success'){
+                        var friends=resp['friend_list'];
+                        for (var elem in friends)
+                        {
+                            text+='<tr><td id=fr_'+elem+' onclick="SelectFriend(this.id)">'+friends[elem]+'</td></tr>';
+
+                        }
+                        var tbl =document.getElementById('friends_table');
+                        tbl.innerHTML=text;
+                    }
+                }
+            });
+        }
+
+
+
+
+
+
+
+
+
+
+
+    }
+}
+
+function ShareEvent()
+{
+    var names=[];
+    for (var a of chosen_events){
+        var temp = document.getElementById(a);
+        names.push(temp.cells[0].innerHTML);
+    }
     $.ajax({
-        url:'/delete_account',
+        url:'/share_event',
         type:'post',
+        data:{'chosen_friends':chosen_friends,
+            'chosen_events':names,
+            'date':current_day + '/' + (dt.getMonth() + 1) + '/' + dt.getFullYear()
+        },
         success: function(resp)
         {
             console.log(resp);
             if (resp['message']=='Success'){
-                window.location.href='/';
+                ShowShareEvent();
             }
+            else
+                document.getElementById("mes_share_event").innerHTML =
+                    '<h1 style="color:lightblue;">'+resp['message']+'</h1>';
         }
     });
 }
+
+function AddFriend()
+{
+    debugger;
+    name = $("#friend_name").val();
+    $.ajax({
+        url:'/add_friend',
+        type:'post',
+        data:{'name':name
+        },
+        success: function(resp)
+        {
+            console.log(resp);
+            if (resp['message']=='Success'){
+                Display('AddFriend')
+            }
+            else
+                document.getElementById("mes_add_friend").innerHTML
+                    ='<h1 style="color:lightblue;">'+resp["message"]+'</h1>';
+        }
+    });
+}
+
+

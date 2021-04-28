@@ -31,28 +31,7 @@
         </div>
     </form>
 </div>
-<script>
-    function Login()
-    {
-    var username_value=$("#name").val();
-    var password_value=$("#password").val();
-    $.ajax({
-        url:'/',
-        type:'post',
-        data:{'username':username_value,
-            'password':password_value},
-        success: function(resp)
-        {
-            console.log(resp);
-            if (resp['message']=='Success')
-                window.location.href='/menu';
-            else if (resp['message']=='No data')
-                document.getElementById("login").innerHTML ='<h1 style="color:crimson;font-size:16x;">Enter data</h1>';
-            else
-                document.getElementById("login").innerHTML ='<h1 style="color:crimson;font-size:16x;">Enter correct password/name</h1>';
-        }
-    });
-    }
-</script>
+
 </body>
+<script src="../static/js/login.js"></script>
 </html>

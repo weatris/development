@@ -1,24 +1,19 @@
-$(document).ready(function() {
-    $('form').on('submit', function(event) {
-        $.ajax({
-            data : {
-                name : $('#name').value(),
-                email : $('#password').value()
-            },
-            type : 'GET',
-            url : '/login'
-        })
-        .done(function(data) {
-            if (data.error) {
-                alert('no');
-                var t =document.getElementById('meta');
-                t.text="Enter correct password/name";
-            }
-            else {
-                window.location.href = 'menu.html';
-            }
-        });
-        event.preventDefault();
+function Login()
+{
+    var username_value=$("#name").val();
+    var password_value=$("#password").val();
+    $.ajax({
+        url:'/',
+        type:'post',
+        data:{'username':username_value,
+            'password':password_value},
+        success: function(resp)
+        {
+            if (resp['message']=='Success')
+                window.location.href='/menu';
+            else
+                document.getElementById("login").innerHTML =
+                    '<h1 style="color:crimson;">'+resp["message"]+'</h1>';
+        }
     });
-});
-
+}

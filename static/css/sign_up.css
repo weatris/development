@@ -113,5 +113,12 @@ input[type=submit]:hover {
   color: blue;
   text-decoration: underline;
 }
-
+h4
+{
+  padding-bottom: 5px;
+}
+progress
+{
+  padding-bottom: 10px;
+}
 /*# sourceMappingURL=sign_up.css.map */
