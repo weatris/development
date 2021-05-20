@@ -1,7 +1,7 @@
 web technology and web development 
 
 In Order to see my website you have to : 
-dearchivate docs.zip
+download and dearchivate docs.zip
 open calendar folder in console
 write "npm start" in console  -  this starts the frontend
 
